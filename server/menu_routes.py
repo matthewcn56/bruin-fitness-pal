@@ -1,9 +1,11 @@
 from route_config import *
+from auth_routes import auth_required
 from flask import jsonify, make_response, request
 from menu_scraper import get_menu_items_from_time_and_hall, get_nutritional_info
 
 @app.route('/menu', methods = ['GET'])
-def getMenu():
+@auth_required
+def getMenu(uid):
     args = request.args
     meal_time = args.get("mealTime")
     hall = args.get("hall")

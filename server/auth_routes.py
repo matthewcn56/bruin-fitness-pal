@@ -12,7 +12,7 @@ def auth_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         token = None
-        if 'token' in request.headers:
+        if 'access-token' in request.headers:
             token = request.headers['access-token']
         if not token:
             return make_response('Invalid Auth Token', 401)
