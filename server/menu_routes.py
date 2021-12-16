@@ -12,12 +12,12 @@ def getMenu():
     mealTimes = ["Breakfast", "Brunch", "Lunch", "Dinner", "Late Night"]
     halls = ["Covel", "DeNeve", "FeastAtRieber", "BruinPlate"]
     info = get_menu_items_from_time_and_hall(meal_time, hall)
-    return jsonify({"info" : info}), 200
+    return make_response(jsonify({"info" : info}), 200)
 
 @app.route('/hours', methods =['GET'])
 def getHours():
     hours = get_hours()
-    return jsonify({"hours" : hours}, 200)
+    return make_response(jsonify({"hours" : hours}), 200)
     
 @app.route('/nutritionalInfo', methods = ['GET'])
 def getNutritionalInfo():
@@ -25,5 +25,4 @@ def getNutritionalInfo():
     recipe_num = args.get("recipeNum")
     serving = args.get("serving")
     info = get_nutritional_info("http://menu.dining.ucla.edu/Recipes/" + recipe_num + "/" + serving)
-    return jsonify({ "info" : info}), 200
-    
+    return make_response(jsonify({ "info" : info}), 200)

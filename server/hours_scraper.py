@@ -35,7 +35,7 @@ def get_hours():
     return daily_halls
 
 
-print(get_hours())
+
 
 
 
