@@ -83,7 +83,10 @@ def refresh_token():
     print(auth_response)
     print(auth_response.text)
     if auth_response.ok:
-        return make_response(jsonify({ 'token' :  auth_response.json()['access-token']}), 200)
+        return make_response(jsonify({ 'token' :  auth_response.json()['id_token']}), 200)
     return make_response("Error", 400)
+
+
+    
 
    
