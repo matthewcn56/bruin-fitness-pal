@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }: AuthWrapperProps) => {
   }, []);
 
   async function attemptLogin(token: string, refreshToken?: string) {
-    console.log("now refresh token is: " + refreshToken);
+    //console.log("now refresh token is: " + refreshToken);
     const validUser = await attemptServerLogin(token, refreshToken);
     if (!validUser) {
       alert("Error logging in!");
@@ -238,5 +238,3 @@ const getRefreshToken = async () => {
     // error reading value
   }
 };
-
-const retrieveRefreshTokenValue = async () => {};
