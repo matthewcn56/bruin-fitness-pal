@@ -1,34 +1,33 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as Google from "expo-auth-session/providers/google";
-import {
-  EXPO_AUTH_CLIENT_ID,
-  IOS_CLIENT_ID,
-  EXPO_AUTH_CLIENT_SECRET,
-} from "@env";
+import { AuthContext, AuthProvider } from "./navigation/AuthProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: EXPO_AUTH_CLIENT_ID,
-    iosClientId: IOS_CLIENT_ID,
-    clientSecret: EXPO_AUTH_CLIENT_SECRET,
-  });
-
-  useEffect(() => {
-    console.log("Vars: " + EXPO_AUTH_CLIENT_ID + "," + IOS_CLIENT_ID);
-  }, []);
-  useEffect(() => {
-    if (response && response.type === "success") {
-      console.log(response);
-    }
-  }, [response]);
   return (
+    <AuthProvider>
+      <AuthenticatedApp />
+    </AuthProvider>
+  );
+}
+
+function AuthenticatedApp() {
+  const { promptLogin, isValidToken, logout } = useContext(AuthContext);
+  return isValidToken ? (
+    <SafeAreaView>
+      <Text> Logged in!</Text>
+      <Button onPress={() => logout()} title="Log Out!" />
+    </SafeAreaView>
+  ) : (
     <View style={styles.container}>
       <Text>Open up App.tsx to start working on your app!</Text>
-      <Button onPress={() => promptAsync()} title="LogIn!" />
+      <Button
+        onPress={() => promptLogin()}
+        title="Log In With Your UCLA Email!"
+      />
       <StatusBar style="auto" />
     </View>
   );
