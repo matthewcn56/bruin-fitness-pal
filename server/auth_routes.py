@@ -60,6 +60,8 @@ def verify_token():
             new_user = db.users.insert_one(user_profile)
         elif existingUser and refresh_token:
             updated_user = db.users.find_one_and_replace({"_id":uid }, user_profile)
+        elif existingUser and not refresh_token:
+            user_profile['refreshToken'] = existingUser['refreshToken']
 
         #print(idinfo)
         return make_response(jsonify({ 'user': user_profile}),  200)
