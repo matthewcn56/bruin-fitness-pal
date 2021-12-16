@@ -33,7 +33,9 @@ def auth_required(f):
 def verify_token():
     jsonData = request.json
     token = jsonData['token']
-    refresh_token = jsonData['refreshToken']
+    refresh_token = None
+    if "refreshToken" in jsonData:
+        refresh_token = jsonData['refreshToken']
     try:
         idinfo = id_token.verify_oauth2_token(token, transport.requests.Request(), os.environ['EXPO_AUTH_CLIENT_ID'])
         uid = idinfo['sub']
@@ -56,7 +58,7 @@ def verify_token():
         # insert if not user there
         if not existingUser:
             new_user = db.users.insert_one(user_profile)
-        if existingUser and refresh_token:
+        elif existingUser and refresh_token:
             updated_user = db.users.find_one_and_replace({"_id":uid }, user_profile)
 
         #print(idinfo)
