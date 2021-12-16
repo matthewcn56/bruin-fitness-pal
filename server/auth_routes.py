@@ -38,7 +38,11 @@ def verify_token():
         refresh_token = jsonData['refreshToken']
     try:
         idinfo = id_token.verify_oauth2_token(token, transport.requests.Request(), os.environ['EXPO_AUTH_CLIENT_ID'])
+        print(idinfo)
         uid = idinfo['sub']
+        existingUser = db.users.find_one({'_id':uid})
+        if existingUser:
+            return make_response(jsonify({ 'user': existingUser}),  200)
         email = idinfo['email']
         name = idinfo['name']
         picture = idinfo['picture']
@@ -50,7 +54,7 @@ def verify_token():
                 "picture": picture
         }
         # add user to db if not existed yet
-        existingUser = db.users.find_one({'_id':uid})
+        
 
         # check to see if refreshToken
         if refresh_token:
@@ -61,7 +65,7 @@ def verify_token():
         elif existingUser and refresh_token:
             updated_user = db.users.find_one_and_replace({"_id":uid }, user_profile)
         elif existingUser and not refresh_token:
-            user_profile['refreshToken'] = existingUser['refreshToken']
+            user_profile = existingUser
 
         #print(idinfo)
         return make_response(jsonify({ 'user': user_profile}),  200)
