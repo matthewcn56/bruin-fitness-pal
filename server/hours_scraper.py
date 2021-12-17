@@ -25,7 +25,8 @@ def get_hours():
         for hall in halls:
             name_section = hall.find("td", class_="hours-head")
             # get name of hall
-            name =  name_section.find("span", class_="hours-location").text
+            name_link =  name_section.find("a")
+            name = name_link['href'].split("Menus/")[1]
             # get breakfast hours if any
             period_hours= hall.find("td", class_="hours-open " + period)
             if period_hours:
